@@ -15,6 +15,16 @@ namespace WebApplication1
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            //If Not logged in, redirect to login page
+            if (!Request.IsAuthenticated)
+            {
+                Session["Username"] = null;
+                Session["logInStatus"] = false;
+                Session["CanUpdateTable"] = false;
+                Response.Redirect("LoginPage.aspx", false);
+            }
+
+
             if (!IsPostBack)
             {
                 //sets the purchased date to default to the current date

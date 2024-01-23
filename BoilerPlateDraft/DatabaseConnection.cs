@@ -7,7 +7,10 @@ namespace BoilerPlateDraft.Code_Repo
 {
     public class DatabaseConnection
     {
-        private string connectionString = "Server=LAPTOP-GUKAUC7S\\SQLEXPRESS;Database=ITAM;User ID=arice11;Password=Dyeflame2!";
+        //private string connectionString = "Server=LAPTOP-GUKAUC7S\\SQLEXPRESS;Database=ITAM;User ID=arice11;Password=Dyeflame2!";
+        private string connectionString = EncryptionDecryption.DecryptString(ConfigurationManager.AppSettings.Get("encryptKey"), ConfigurationManager.AppSettings.Get("connectionstring"));
+
+
         //create a database connection and pass a sql query
         BoilerPlateDraft.Code_Repo.AzureSQLServerConnection dbconn = new BoilerPlateDraft.Code_Repo.AzureSQLServerConnection();
 
