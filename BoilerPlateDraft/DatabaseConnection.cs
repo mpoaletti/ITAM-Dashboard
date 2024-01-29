@@ -31,44 +31,59 @@ namespace BoilerPlateDraft.Code_Repo
         public DataTable SearchInventoryItem(string searchValue, string searchType, string endDate = "")
         {
             DataTable dt = new DataTable();
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                SqlCommand cmd = new SqlCommand();
-                cmd.Connection = conn;
-                string queryBegining = "SELECT * FROM tblInventory WHERE ";
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    string queryBegining = "SELECT * FROM tblInventory WHERE ";
 
-                if (searchType == "barcode")
-                {
-                    cmd.CommandText = queryBegining + "InventoryIdentifierBarCode = @SearchValue";
-                    cmd.Parameters.AddWithValue("@SearchValue", searchValue);
-                }
-                else if (searchType == "assignedUser")
-                {
-                    cmd.CommandText = queryBegining + "AssignedUser LIKE @SearchValue";
-                    cmd.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
-                }
-                else if (searchType == "serialNumber")
-                {
-                    cmd.CommandText = queryBegining + "SerialNumber = @SearchValue";
-                    cmd.Parameters.AddWithValue("@SearchValue", searchValue);
-                }
-                else if (searchType == "purchasedDate")
-                {
-                    cmd.CommandText = queryBegining + "PurchasedDate BETWEEN @StartDate AND @EndDate";
-                    cmd.Parameters.AddWithValue("@StartDate", searchValue);
-                    cmd.Parameters.AddWithValue("@EndDate", endDate);
-                }
-                else
-                {
-                    cmd.CommandText = "SELECT * FROM tblInventory";
-                }
+                    if (searchType == "barcode")
+                    {
+                        cmd.CommandText = queryBegining + "InventoryIdentifierBarCode = @SearchValue";
+                        cmd.Parameters.AddWithValue("@SearchValue", searchValue);
+                    }
+                    else if (searchType == "assignedUser")
+                    {
+                        cmd.CommandText = queryBegining + "AssignedUser LIKE @SearchValue";
+                        cmd.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
+                    }
+                    else if (searchType == "serialNumber")
+                    {
+                        cmd.CommandText = queryBegining + "SerialNumber = @SearchValue";
+                        cmd.Parameters.AddWithValue("@SearchValue", searchValue);
+                    }
+                    else if (searchType == "purchasedDate")
+                    {
+                        cmd.CommandText = queryBegining + "PurchasedDate BETWEEN @StartDate AND @EndDate";
+                        cmd.Parameters.AddWithValue("@StartDate", searchValue);
+                        cmd.Parameters.AddWithValue("@EndDate", endDate);
+                    }
+                    else
+                    {
+                        cmd.CommandText = "SELECT * FROM tblInventory";
+                    }
 
 
-                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        conn.Open();
+                        da.Fill(dt);
+                        conn.Close();
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                //string connectionstring = EncryptionDecryption.DecryptString(ConfigurationManager.AppSettings.Get("encryptKey"), ConfigurationManager.AppSettings.Get("connectionstring"));
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    conn.Open();
-                    da.Fill(dt);
                     conn.Close();
+
+
                 }
             }
             return dt;

@@ -95,7 +95,14 @@
         }
 
         SearchResultsGridView.DataSource = dt;
-        SearchResultsGridView.DataBind();
+        try{
+            SearchResultsGridView.DataBind();
+        }
+        catch (Exception ex)
+            {
+               
+            }
+
 
         Session["SearchValue"] = searchValue;
         Session["SearchType"] = searchType;
