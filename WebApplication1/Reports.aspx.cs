@@ -43,24 +43,23 @@ namespace WebApplication1
             }
 
             try{
-
+                //set excelRowNum variable - set to 1 as Excel is 1 based and database/code is 0 based
                 int excelRowNum = 1;
                 
                 //get column headers
                 for(int i = 0; i < dt.Columns.Count; i++) {
                     workSheet.Cells[excelRowNum, i + 1].Value = dt.Columns[i].ColumnName;
                     workSheet.Cells[excelRowNum, i + 1].Interior.Color = System.Drawing.Color.Gray;
-                    workSheet.Columns[i + 1].AutoFit();
-                    //Excel.Range columnHeader = workSheet.Range[workSheet.Cells[excelRowNum, i + 1]];
-                    //columnHeader.Interior.Color = System.Drawing.Color.Gray;
-                    //Excel.Range rng = workSheet.Columns[i + 1];
-                    //rng.AutoFit();
+                    //workSheet.Columns[i + 1].AutoFit();
                 }
 
-                //Set excelRowNum to 1 as Excel is 1 based, not 0 based.
+                //Set excelRowNum to 2 as we have column headers in row 1, data to start in row 2.
                 excelRowNum = 2;
 
+                //set rowNum variable for database - 0 based
                 int rowNum = 0;
+
+                //get data from datatable
                 foreach(DataRow row in dt.Rows) {
                     for(int i = 0; i < dt.Columns.Count; i++) {
                         workSheet.Cells[excelRowNum,i+1].Value = row[i].ToString();
@@ -69,6 +68,7 @@ namespace WebApplication1
                     excelRowNum++;
                 }
 
+                //Set column size to autofit data entered
                 for (int i = 0; i < dt.Columns.Count; i++)
                 {
                     workSheet.Columns[i + 1].AutoFit();
